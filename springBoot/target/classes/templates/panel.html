@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <style>
+        .input{
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-color: 2px solid black;
+            padding: 10px;
+            background: #000;
+            color: white;
+        }
+        body {
+            background-color: midnightblue;
+            color: cadetblue;
+            padding: 20px;
+        }
+        .user-details {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px cornsilk;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1>User Details</h1>
+    <div id="userDetailsContent" class="input">
+    </div>
+</div>
+
+<script>
+
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+    if (userDetails) {
+        document.getElementById('userDetailsContent').innerHTML = `
+                <p><strong>Account ID:</strong> ${userDetails.accountId}</p>
+                <p><strong>Account Holder:</strong> ${userDetails.accountHolderName}</p>
+                <p><strong>Balance:</strong> $${userDetails.balance}</p>
+            `;
+    } else {
+        document.getElementById('userDetailsContent').innerHTML = `<p>No user details found.</p>`;
+    }
+</script>
+</body>
+</html>

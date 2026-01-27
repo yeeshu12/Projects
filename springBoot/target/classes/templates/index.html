@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .input{
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-color: 2px solid black;
+            padding: 10px;
+            background: #000;
+            color: white;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>UserSec | Panel</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+</head>
+<body>
+
+<header class="header">
+    <div class="container is-fullhd flex items-center justify-around">
+        <div class="logo__">
+            <a href="/" class="header__link  font-semibold text-[17px]" alt="PNB bank">
+                <span >PNB</span> Bank
+            </a>
+        </div>
+        <ul class="flex items-center gap-2 mt-3">
+            <!-- <li><a href="/panel"   class="text-lg button is-success px-[100px]">Panel</a></li>   -->
+            <li><a href="/panel" class="text-lg button is-success px-[100px]" onclick="redirectToPanel()">Panel</a></li>
+        </ul>
+    </div>
+</header>
+
+<hr>
+<div class="hero py-[100px]">
+    <div class="container hero__container flex  items-center justify-center ">
+        <div class="flex flex-col items-center justify-between ">
+
+            <input type="text" id="accountId" placeholder="Account ID" class="input"/>
+            <input type="text" id="accountHolderName" placeholder="Account Holder Name"/>
+            <input type="number" id="initialBalance" placeholder="Initial Balance"/>
+            <button onclick="createAccount()"> new  Account</button>
+            <div id="accountCreationResult"></div>
+
+            <h3>Account details</h3>
+            <input type="text" id="accountInfoId" placeholder="Account ID" style="border-color: white;"/>
+            <button style="background-color: white; padding: 15px 70px;border-radius: 12px;" onclick="getAccountInfo()">Get Account Info</button>
+            <div id="accountDetails"></div>
+
+            <h3>Deposit</h3>
+            <input type="text" id="depositAccountId" placeholder="Account ID"/>
+            <input type="number" id="depositAmount" placeholder="Amount"/>
+            <button onclick="depositMoney()">Deposit</button>
+
+            <h3>Withdraw</h3>
+            <input type="text" id="withdrawAccountId" placeholder="Account ID"/>
+            <input  type="text" id="withdrawAmount" placeholder="Amount" class="input px-[16px] py-[20px] w-[330px] bg-white/0 border-[1px] border-[#ECE9E610] rounded-[12px] color-secondary transition-border-color transition-duration-300 transition-ease focus:border-white/45 text-white " />
+            <button class="button is-link btn" onclick="withdrawMoney()">Withdraw</button>
+
+            <div id="adminPanel" class="text-white"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+
+    function createAccount() {
+        var accountId = $("#accountId").val();
+        var accountHolderName = $("#accountHolderName").val();z
+        var initialBalance = $("#initialBalance").val();
+
+        $.ajax({
+            url: '/api/bank/create',
+            method: 'POST',     //sends post req
+            data: { accountId: accountId, accountHolderName: accountHolderName, initialBalance: initialBalance },
+            success: function(response) {
+                $("#accountCreationResult").html("Account Created Successfully!");
+                displayAdminData(accountId, accountHolderName, initialBalance);
+            },
+            error: function() {
+                alert("Error creating account!");
+                console.log("401 HTTP error");
+            }
+        });
+    }
+
+
+    function getAccountInfo() {
+        var accountId = $("#accountInfoId").val();
+        $.ajax({
+            url: '/api/bank/account/' + accountId,
+            method: 'GET',
+            success: function(response) {   //get req
+                $("#accountDetails").html(`
+                        <p>Account Holder: ${response.accountHolderName}</p>
+                        <p>Balance: $${response.balance}</p>
+                    `);
+            },
+            error: function() {
+                alert("Account not found!");
+                alert("try again")
+                console.log("404 HTTP client error ");
+            }
+        });
+    }
+    function depositMoney() {
+        var accountId = $("#depositAccountId").val();
+        var amount = $("#depositAmount").val();
+
+        $.ajax({
+            url: '/api/bank/deposit',
+            method: 'POST',
+            data: { accountId: accountId, amount: amount },
+            success: function(response) {
+                alert(response);
+                getAccountInfo();
+            },
+            error: function() {
+                alert("Error making deposit!");
+            }
+        });
+    }
+
+
+    function redirectToPanel() {
+
+        const accountId = $("#accountId").val();
+        const accountHolderName = $("#accountHolderName").val();
+        const initialBalance = $("#initialBalance").val();
+
+        const userDetails = {
+            accountId: accountId,
+            accountHolderName: accountHolderName,
+            balance: initialBalance
+        };
+        localStorage.setItem('userDetails', JSON.stringify(userDetails));
+
+        window.location.href = "panel.html";
+    }
+
+
+    function withdrawMoney() {
+        var accountId = $('#withdrawAccountId').val();
+        var amount = $('#withdrawAmount').val();
+
+        amount = parseFloat(amount);
+
+        if (isNaN(amount) || amount <= 0) {
+            alert("invalid usage");
+            return;
+        }
+
+        $.ajax({
+            url: '/api/bank/withdraw',
+            method: 'POST',
+            data: { accountId: accountId, amount: amount },
+
+            success: function (response) {
+                alert(response);
+                getAccountInfo();
+            },
+
+            error: function () {
+                alert("Error when withdrawing funds!");
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

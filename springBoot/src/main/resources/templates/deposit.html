@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .input{
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #000;
+            color: white;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit page </title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+<body>
+<a href="/">Main page </a>
+<main>
+    <div>
+        <form>
+            <h3>Deposit</h3>
+            <input class="input" type="text" id="depositAccountId" placeholder="Account ID"/>
+            <input type="number" id="depositAmount" placeholder="Amount"/>
+            <button class="button is-link" onclick="depositMoney()">Deposit</button>
+
+            <h3>Withdraw</h3>
+            <input type="text" id="withdrawAccountId" placeholder="Account ID"/>
+            <input type="number" id="withdrawAmount" placeholder="Amount"/>
+            <button class="button is-link" onclick="withdrawMoney()">Withdraw</button>
+        </form>
+    </div>
+</main>
+
+
+<script>
+
+    function depositMoney() {
+        var accountId = $("#depositAccountId").val();
+        var amount = $("#depositAmount").val();
+        $.ajax({
+            url: '/api/bank/deposit',
+            method: 'POST',
+            data: { accountId: accountId, amount: amount },
+            success: function(response) {
+                alert(response);
+                getAccountInfo();
+            },
+            error: function() {
+                alert("Error making deposit!");
+            }
+        });
+    }
+    function withdrawMoney() {
+        var accountId = $('#withdrawAccountId').val();
+        var amount = $('#withdrawAmount').val();
+
+        amount = parseFloat(amount);
+
+        if (isNaN(amount) || amount <= 0) {
+            alert("Enter the correct amount (positive numbers only)!");
+            return;
+        }
+
+        $.ajax({
+            url: '/api/bank/withdraw',
+            method: 'POST',
+            data: { accountId: accountId, amount: amount },
+
+            success: function (response) {
+                alert(response);
+                getAccountInfo();
+            },
+
+            error: function () {
+                alert("Error when withdrawing funds!");
+            }
+        });
+    }
+
+
+</script>
+
+
+</body>
+</html>
+
+
+
