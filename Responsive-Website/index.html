@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Website</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">MyWeb</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <h1>Build. Create. Inspire.</h1>
+    <p>Modern responsive website using HTML, CSS and JavaScript.</p>
+    <button onclick="scrollToSection('contact')">Get in Touch</button>
+  </section>
+
+  <section id="about" class="section">
+    <h2>About</h2>
+    <p>This website demonstrates responsive design and basic JavaScript interactivity.</p>
+  </section>
+
+  <section id="services" class="section services">
+    <h2>Features</h2>
+    <div class="card-container">
+      <div class="card">Responsive Design</div>
+      <div class="card">Interactive UI</div>
+      <div class="card">Clean Layout</div>
+    </div>
+  </section>
+
+  <section id="contact" class="section contact">
+    <h2>Contact</h2>
+    <form onsubmit="return showAlert()">
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2026</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
