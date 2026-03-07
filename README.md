@@ -2,6 +2,10 @@
 
 React app to visualize sorting algorithms like Bubble Sort, Merge Sort and Quick Sort.
 
+# Smart Task Manager
+
+A full-stack task management application built with React, Node.js, Express, and MongoDB.
+
 
 # Advanced URL Shortener
 
@@ -30,6 +34,12 @@ Features
 Backend
 npm install express cors
 node server.js
+
+## Tech Stack
+
+Frontend: React  
+Backend: Node.js + Express  
+Database: MongoDB
 
 Frontend
 create-react-app frontend
